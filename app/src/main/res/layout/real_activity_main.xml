@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/white"
+    android:paddingLeft="15px"
+    android:paddingRight="15px"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="3" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3px"
+                android:textSize="11pt"
+                android:paddingLeft="5px"
+                android:textColor="@color/black"
+                android:text="简易音乐播放器" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|right"
+            android:layout_weight="2" >
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="16pt"
+                android:layout_height="16pt"
+                android:layout_marginRight="10px"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="16pt"
+                android:layout_height="16pt"
+                android:layout_marginRight="10px"
+                android:layout_marginLeft="10px"
+                android:background="@mipmap/pic_search" />
+
+            <Button
+                android:id="@+id/btn_scan"
+                android:layout_width="16pt"
+                android:layout_height="16pt"
+                android:layout_marginLeft="10px"
+                android:background="@mipmap/pic_scan" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical" >
+
+        <ImageView
+            android:layout_width="15pt"
+            android:layout_height="15pt"
+            android:paddingRight="5px"
+            android:src="@mipmap/pic_play_all"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_playAll"
+            android:textSize="10pt"
+            android:paddingLeft="5px"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:text="播放全部" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_listOfAllMusic"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10px"
+        android:layout_height="0dp"
+        android:layout_weight="7"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="left|center_vertical"
+            android:id="@+id/linear_layout_bottom"
+            android:layout_weight="4" >
+
+            <ImageView
+                android:layout_width="16pt"
+                android:layout_height="16pt"
+                android:layout_marginRight="10px"
+                android:src="@mipmap/pic_music" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="5px"
+                android:textSize="8pt"
+                android:textColor="@color/black"
+                android:singleLine="true"
+                android:id="@+id/text_music_name" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:layout_weight="1" >
+
+            <Button
+                android:layout_width="16pt"
+                android:layout_height="16pt"
+                android:id="@+id/btn_play_or_pause"
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="10px"
+                android:background="@mipmap/pic_play"/>
+
+            <Button
+                android:layout_width="16pt"
+                android:layout_height="16pt"
+                android:id="@+id/btn_show_play_list"
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="10px"
+                android:background="@mipmap/pic_play_list"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

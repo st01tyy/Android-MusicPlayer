@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingLeft="15px"
+    android:paddingRight="15px"
+    tools:context=".MusicActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <Button
+            android:layout_width="16pt"
+            android:layout_height="16pt"
+            android:id="@+id/btn_back"
+            android:background="@mipmap/pic_back"
+            android:layout_marginRight="10px" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="10px"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_title_name"
+                android:textColor="@color/black"
+                android:textSize="9pt"
+                android:singleLine="true"
+                android:text="歌曲名" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_title_artist"
+                android:singleLine="true"
+                android:textSize="7pt"
+                android:text="歌手" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@mipmap/pic_logo"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/text_pass_time"
+                android:gravity="right"
+                android:textSize="6pt"
+                android:text="00:00" />
+
+            <SeekBar
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:id="@+id/seekbar" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/text_duration"
+                android:textSize="6pt"
+                android:text="00:00" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="20pt"
+                    android:layout_height="20pt"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="10px"
+                    android:background="@mipmap/pic_loop"
+                    android:id="@+id/btn_mode" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="20pt"
+                    android:layout_height="20pt"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="10px"
+                    android:background="@mipmap/pic_previous"
+                    android:id="@+id/btn_play_previous" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="22pt"
+                    android:layout_height="22pt"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="10px"
+                    android:background="@mipmap/pic_play"
+                    android:id="@+id/btn_primary_play_or_pause" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="20pt"
+                    android:layout_height="20pt"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="10px"
+                    android:background="@mipmap/pic_next"
+                    android:id="@+id/btn_play_next" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="20pt"
+                    android:layout_height="20pt"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginRight="10px"
+                    android:background="@mipmap/pic_play_list"
+                    android:id="@+id/btn_primary_show_play_list" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

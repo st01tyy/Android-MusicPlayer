@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_play_next"
+        android:icon="@mipmap/pic_play_next"
+        android:title="下一首播放" />
+    <item
+        android:id="@+id/item_add_to_play_list"
+        android:icon="@mipmap/pic_add_to_play_list"
+        android:title="添加至播放列表" />
+    <item
+        android:id="@+id/item_delete_file"
+        android:icon="@mipmap/pic_delete"
+        android:title="删除" />
+</menu>
