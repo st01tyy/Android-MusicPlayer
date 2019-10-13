@@ -18,11 +18,20 @@ import java.util.List;
 public class MusicAdapter extends RecyclerView.Adapter<MyViewHolder>
 {
     private List<Music> musicList;
+    private boolean isPlayList;
 
     public MusicAdapter(List<Music> musicList)
     {
         this.musicList = musicList;
+        isPlayList = false;
     }
+
+    public MusicAdapter(List<Music> musicList, int val)
+    {
+        this.musicList = musicList;
+        isPlayList = true;
+    }
+
 
     @NonNull
     @Override
@@ -48,40 +57,63 @@ public class MusicAdapter extends RecyclerView.Adapter<MyViewHolder>
                     Background.updateMainActivityUI(music.getName(), true);
             }
         });
-        holder.getBtn_options().setOnClickListener(new View.OnClickListener()
+        if(isPlayList)
         {
-            @Override
-            public void onClick(View view)
+            holder.getBtn_options().setBackgroundResource(R.mipmap.pic_delete);
+            holder.getBtn_options().setOnClickListener(new View.OnClickListener()
             {
-                PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
-                popupMenu.getMenuInflater().inflate(R.menu.menu_of_all_music_list, popupMenu.getMenu());
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+                @Override
+                public void onClick(View v)
                 {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem)
+                    Music music = musicList.get(position);
+                    music.previous.next = music.next;
+                    music.next.previous = music.previous;
+                    Background.playListActivity.refreshRecyclerList();
+                }
+            });
+        }
+        else
+        {
+            holder.getBtn_options().setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    PopupMenu popupMenu = new PopupMenu(view.getContext(), view);
+                    popupMenu.getMenuInflater().inflate(R.menu.menu_of_all_music_list, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
                     {
-                        if(menuItem.getItemId() == R.id.item_add_to_play_list)
-                            Background.musicPlayer.addToList(musicList.get(position));
-                        else if(menuItem.getItemId() == R.id.item_play_next)
-                            Background.musicPlayer.addToNext(musicList.get(position));
-                        else
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem)
                         {
-                            File file = new File(musicList.get(position).getPath());
-                            file.delete();
-                            Background.mainActivity.refreshRecyclerView();
+                            if(menuItem.getItemId() == R.id.item_add_to_play_list)
+                                Background.musicPlayer.addToList(musicList.get(position));
+                            else if(menuItem.getItemId() == R.id.item_play_next)
+                                Background.musicPlayer.addToNext(musicList.get(position));
+                            else
+                            {
+                                File file = new File(musicList.get(position).getPath());
+                                file.delete();
+                                Background.mainActivity.refreshRecyclerView();
+                            }
+                            return true;
                         }
-                        return true;
-                    }
 
-                });
-                popupMenu.show();
-            }
-        });
+                    });
+                    popupMenu.show();
+                }
+            });
+        }
+
     }
 
     @Override
     public int getItemCount()
     {
         return musicList.size();
+    }
+
+    public List<Music> getMusicList() {
+        return musicList;
     }
 }

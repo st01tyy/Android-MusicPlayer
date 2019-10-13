@@ -2,6 +2,7 @@ package com.example.musicplayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,7 @@ public class MusicActivity extends AppCompatActivity
     private MyTimerTask timerTask;
     private SeekBar seekBar;
     private TextView passTime;
+    private Button playOrPause;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,7 +53,7 @@ public class MusicActivity extends AppCompatActivity
         textView = (TextView) findViewById(R.id.text_pass_time);
         textView.setText(getTime(musicPlayer.getCurrentProgress()));
 
-        final Button playOrPause = (Button) findViewById(R.id.btn_primary_play_or_pause);
+        playOrPause = (Button) findViewById(R.id.btn_primary_play_or_pause);
         if(musicPlayer.isPlaying())
         {
             setTimer();
@@ -86,6 +88,8 @@ public class MusicActivity extends AppCompatActivity
             }
         });
 
+        seekBar.setMax(musicPlayer.getDuration());
+        seekBar.setProgress(musicPlayer.getCurrentProgress());
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
@@ -117,11 +121,7 @@ public class MusicActivity extends AppCompatActivity
             {
                 stopTimer();
                 String[] arr = musicPlayer.playPrevious();
-                setTimer();
-                TextView textView = (TextView) findViewById(R.id.text_title_name);
-                textView.setText(arr[0]);
-                textView = (TextView) findViewById(R.id.text_title_artist);
-                textView.setText(arr[1]);
+                updateUI(arr[0], arr[1]);
             }
         });
 
@@ -133,11 +133,7 @@ public class MusicActivity extends AppCompatActivity
             {
                 stopTimer();
                 String[] arr = musicPlayer.playNext();
-                setTimer();
-                TextView textView = (TextView) findViewById(R.id.text_title_name);
-                textView.setText(arr[0]);
-                textView = (TextView) findViewById(R.id.text_title_artist);
-                textView.setText(arr[1]);
+                updateUI(arr[0], arr[1]);
             }
         });
 
@@ -157,6 +153,17 @@ public class MusicActivity extends AppCompatActivity
             }
         });
 
+        Button showPlayList = (Button) findViewById(R.id.btn_primary_show_play_list);
+        showPlayList.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MusicActivity.this, PlayListActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void setTimer()
@@ -166,18 +173,31 @@ public class MusicActivity extends AppCompatActivity
         timer.scheduleAtFixedRate(timerTask, 0, 100);
     }
 
-    public void updateTitle(String name, String artist)
+    public void updateUI(String name, String artist)
     {
+        stopTimer();
+
         TextView textView = (TextView) findViewById(R.id.text_title_name);
         textView.setText(name);
         textView = (TextView) findViewById(R.id.text_title_artist);
         textView.setText(artist);
+        textView = (TextView) findViewById(R.id.text_duration);
+        textView.setText(getTime(musicPlayer.getDuration()));
+
+        if(musicPlayer.isPlaying())
+        {
+            playOrPause.setBackgroundResource(R.mipmap.pic_pause);
+            setTimer();
+        }
     }
 
     private void stopTimer()
     {
         if(timer != null)
+        {
             timer.cancel();
+            timer = null;
+        }
     }
 
     @Override

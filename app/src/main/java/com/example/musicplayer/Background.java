@@ -20,6 +20,8 @@ public class Background
 
     public static MusicActivity musicActivity;
 
+    public static PlayListActivity playListActivity;
+
 
     public static boolean playMusicNow(Music music)
     {

@@ -39,7 +39,7 @@ import javax.xml.datatype.Duration;
 import static android.os.Environment.getExternalStorageDirectory;
 import static com.example.musicplayer.Background.*;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
+public class MainActivity extends AppCompatActivity
 {
 
     private MediaPlayer mediaPlayer = new MediaPlayer();
@@ -49,94 +49,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
         setContentView(R.layout.real_activity_main);
 
         mainActivity = this;
-
         if(musicPlayer == null)
             musicPlayer = new CustomMusicPlayer();
-
         mainActivityMusicName = (TextView) findViewById(R.id.text_music_name);
         mainActivityPlayOrPause = (Button) findViewById(R.id.btn_play_or_pause);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView_listOfAllMusic);
 
-        final RecyclerView listOfAllMusic = (RecyclerView) findViewById(R.id.recyclerView_listOfAllMusic);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        refreshRecyclerView();
+
         Button btn_scan = (Button) findViewById(R.id.btn_scan);
-
         btn_scan.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-
-                Log.d("MainActivity", "onClick");
-                List<Music> musicList = scanMusic();
-                MusicAdapter musicAdapter = new MusicAdapter(musicList);
-                listOfAllMusic.setAdapter(musicAdapter);
-                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.GONE);
+                refreshRecyclerView();
             }
         });
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        listOfAllMusic.setLayoutManager(linearLayoutManager);
-        //setContentView(R.layout.item_music);
-
-        /*
-        timer = new Timer();
-
-        Button btn_pause = (Button) findViewById(R.id.btn_pause);
-        Button btn_start = (Button) findViewById(R.id.btn_start);
-        Button btn_end = (Button) findViewById(R.id.btn_stop);
-        seekBar = (SeekBar) findViewById(R.id.seekbar);
-        final TextView textView = (TextView) findViewById(R.id.textview);
-
-        btn_pause.setOnClickListener(this);
-        btn_start.setOnClickListener(this);
-        btn_end.setOnClickListener(this);
-
-        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        else
-            initMediaPlayer();
-
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        TextView playAll = (TextView) findViewById(R.id.text_playAll) ;
+        playAll.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b)
+            public void onClick(View v)
             {
-                textView.setText("onProgressChanged");
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar)
-            {
-                textView.setText("onStartTrackingTouch");
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar)
-            {
-                textView.setText("onStopTrackingTouch");
+                MusicAdapter musicAdapter = (MusicAdapter) recyclerView.getAdapter();
+                List<Music> list = musicAdapter.getMusicList();
+                for(int i = 0; i < list.size(); i++)
+                    musicPlayer.addToList(list.get(i));
+                musicPlayer.play();
+                updateMainActivityUI(musicPlayer.getName(), musicPlayer.isPlaying());
             }
         });
-
-        File file = new File(Environment.getExternalStorageDirectory().getPath());
-        textView.setText(Integer.toString(file.listFiles(new MyFileFilter()).length));
-//        File[] fileList = file.listFiles();
-//        for(int i = 0; i < fileList.length; i++)
-//        {
-//            Log.d("MainActivity", fileList[i].getAbsolutePath());
-//            String[] arr = fileList[i].getAbsolutePath().split(".");
-//            if(arr.length > 0 && arr[arr.length - 1].equals("mp3"))
-//            {
-//                textView.setText(fileList[i].getAbsolutePath());
-//            }
-//        }
-         */
-
-        List<Music> musicList = scanMusic();
-        final MusicAdapter musicAdapter = new MusicAdapter(musicList);
-        listOfAllMusic.setAdapter(musicAdapter);
 
         mainActivityPlayOrPause.setOnClickListener(new View.OnClickListener()
         {
@@ -171,6 +124,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         });
+
+        Button showPlayList = (Button) findViewById(R.id.btn_show_play_list);
+        showPlayList.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(MainActivity.this, PlayListActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private List<Music> scanMusic()
@@ -182,7 +146,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             for(int i = 0; i < cursor.getCount(); i++)
             {
-                musicList.add(new Music(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)), cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)), cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))));
+                if(new File(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))).exists())
+                    musicList.add(new Music(cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)), cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)), cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA))));
                 cursor.moveToNext();
             }
         }
@@ -196,56 +161,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setAdapter(musicAdapter);
     }
 
-    private void initMediaPlayer()
-    {
-        try
-        {
-            File file = new File(Environment.getExternalStorageDirectory(), "test.mp3");
-            mediaPlayer.setDataSource(file.getPath());
-            mediaPlayer.prepare();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         if(requestCode == 1)
         {
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                initMediaPlayer();
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                //initMediaPlayer();
             else
             {
                 Toast.makeText(this, "拒绝权限将无法使用程序", Toast.LENGTH_LONG).show();
                 //finish();
             }
         }
-    }
-
-    @Override
-    public void onClick(View view)
-    {
-//        seekBar.setProgress(seekBar.getProgress() + 5, true);
-//        if(view.getId() == R.id.btn_pause)
-//        {
-//            mediaPlayer.pause();
-//            timer.cancel();
-//        }
-//        else if(view.getId() == R.id.btn_start)
-//        {
-//            timer = new Timer();
-//            timer.scheduleAtFixedRate(new MyTimerTask(mediaPlayer, seekBar), 0, 100);
-//            mediaPlayer.start();
-//        }
-//        else
-//        {
-//            mediaPlayer.reset();
-//            initMediaPlayer();
-//            timer.cancel();
-//        }
     }
 
     @Override
