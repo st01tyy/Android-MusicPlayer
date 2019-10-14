@@ -34,21 +34,6 @@
             android:gravity="center_vertical|right"
             android:layout_weight="2" >
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="16pt"
-                android:layout_height="16pt"
-                android:layout_marginRight="10px"
-                android:visibility="invisible" />
-
-            <Button
-                android:id="@+id/btn_search"
-                android:layout_width="16pt"
-                android:layout_height="16pt"
-                android:layout_marginRight="10px"
-                android:layout_marginLeft="10px"
-                android:background="@mipmap/pic_search" />
-
             <Button
                 android:id="@+id/btn_scan"
                 android:layout_width="16pt"
